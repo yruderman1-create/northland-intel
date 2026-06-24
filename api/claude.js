@@ -7,7 +7,12 @@ export default async function handler(req, res) {
 
   try {
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' });
+    if (!apiKey) return res.status(500).json({
+      error: 'ANTHROPIC_API_KEY not configured',
+      defined: apiKey !== undefined,
+      length: apiKey?.length ?? 0,
+      allKeys: Object.keys(process.env).filter(k => k.includes('ANTHROP')),
+    });
 
     // Read body from stream — Vercel non-Next.js does not pre-parse JSON
     const raw = await new Promise((resolve, reject) => {
